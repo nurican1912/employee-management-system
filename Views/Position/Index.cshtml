@@ -1,41 +1,97 @@
-@model IEnumerable<Position>
-
+@model IEnumerable<EmployeeManagementSystem.Models.Position>
 @{
-    ViewData["Title"] = "Positions";
+    ViewData["Title"] = "Pozisyonlar";
 }
 
-<h2>Positions</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0 fw-semibold"><i class="bi bi-briefcase me-2 text-muted"></i>Pozisyonlar</h4>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i>Yeni Pozisyon
+    </a>
+</div>
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-}
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-}
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Pozisyon Adı</th>
+                            <th class="pe-4 text-end">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-medium">
+                                    <i class="bi bi-briefcase text-muted me-2"></i>@item.Name
+                                </td>
+                                <td class="pe-4 text-end">
+                                    <a asp-action="Details" asp-route-id="@item.PositionId"
+                                       class="btn btn-sm btn-outline-secondary me-1" title="Detay">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@item.PositionId"
+                                       class="btn btn-sm btn-outline-warning me-1" title="Düzenle">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                            data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                            data-position-id="@item.PositionId"
+                                            data-position-name="@item.Name">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="bi bi-briefcase fs-1 d-block mb-3 opacity-25"></i>
+                <p>Henüz pozisyon eklenmemiş.</p>
+                <a asp-action="Create" class="btn btn-primary btn-sm">İlk pozisyonu ekle</a>
+            </div>
+        }
+    </div>
+</div>
 
-<p>
-    <a class="btn btn-primary" asp-action="Create"><i class="bi bi-plus-circle"></i> Add New Position</a>
-</p>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Position Name</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.Name</td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.PositionId" class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i> Edit</a>
-                <a asp-action="Details" asp-route-id="@item.PositionId" class="btn btn-info btn-sm"><i class="bi bi-info-circle"></i> Details</a>
-                <a asp-action="Delete" asp-route-id="@item.PositionId" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Delete</a>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table> 
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="bi bi-exclamation-triangle me-2"></i>Pozisyonu Sil</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body py-4">
+                <p class="mb-1"><strong id="modalPositionName"></strong> pozisyonu silinecek.</p>
+                <p class="text-muted small mb-0">Bu işlem geri alınamaz.</p>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">İptal</button>
+                <form id="deleteForm" method="post" style="display:inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i>Evet, Sil
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('deleteModal').addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            document.getElementById('modalPositionName').textContent = button.getAttribute('data-position-name');
+            document.getElementById('deleteForm').action = '/Position/DeleteConfirmed/' + button.getAttribute('data-position-id');
+        });
+    </script>
+}

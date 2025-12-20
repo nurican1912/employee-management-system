@@ -1,5 +1,7 @@
 html {
   font-size: 14px;
+  position: relative;
+  min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -8,24 +10,88 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
-  margin-bottom: 60px;
+  background-color: #f8f9fa;
+  color: #212529;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* Focus ring */
+.btn:focus, .btn:active:focus, .form-control:focus, .form-select:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.2);
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+/* Navbar brand rengi */
+.navbar-brand {
+  letter-spacing: -0.3px;
+}
+
+/* Stat kartları */
+.stat-card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1) !important;
+}
+
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Tablo */
+.table > :not(caption) > * > * {
+  padding-top: 0.85rem;
+  padding-bottom: 0.85rem;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(13, 110, 253, 0.03);
+}
+
+/* Kart genel */
+.card {
+  border-radius: 0.625rem;
+}
+
+/* Input group birleştirme */
+.input-group .form-control:not(:first-child),
+.input-group .form-select:not(:first-child) {
+  border-left: 0;
+}
+
+.input-group .form-control:focus,
+.input-group .form-select:focus {
+  z-index: 3;
+}
+
+/* Toast */
+.toast-container .toast {
+  min-width: 280px;
+}
+
+/* Sayfa başlığı boşluğu */
+h4.fw-semibold {
+  letter-spacing: -0.3px;
+}
+
+/* Çalışan detay avatarı */
+.avatar-circle {
+  user-select: none;
+  font-size: 1.4rem;
+}
+
+/* Footer */
+.footer {
+  background-color: #f8f9fa;
+}
+
+/* Form label */
+.form-label.fw-semibold {
+  color: #374151;
+  font-size: 0.875rem;
 }

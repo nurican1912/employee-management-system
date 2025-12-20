@@ -1,27 +1,35 @@
-@model Position
-
+@model EmployeeManagementSystem.Models.Position
 @{
-    ViewData["Title"] = "Edit Position";
+    ViewData["Title"] = "Pozisyon Düzenle";
 }
 
-<h2>Edit Position</h2>
+<div class="d-flex align-items-center mb-4 gap-2">
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left"></i></a>
+    <h4 class="mb-0 fw-semibold">Pozisyon Düzenle</h4>
+</div>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" asp-route-id="@Model.PositionId" method="post">
-            @Html.AntiForgeryToken()
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="PositionId" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <form asp-action="Edit" asp-route-id="@Model.PositionId" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="PositionId" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small"></div>
+                    <div class="mb-4">
+                        <label asp-for="Name" class="form-label fw-semibold">Pozisyon Adı</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="bi bi-check-lg me-1"></i>Güncelle
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary px-4">İptal</a>
+                    </div>
+                </form>
             </div>
-            <div class="form-group mt-3">
-                <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Save</button>
-                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 

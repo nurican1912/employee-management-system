@@ -1,8 +1,120 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model EmployeeManagementSystem.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="mb-0 fw-semibold">Hoş geldin, <span class="text-primary">@User.Identity!.Name</span></h4>
+        <small class="text-muted">@DateTime.Now.ToString("dd MMMM yyyy, dddd", new System.Globalization.CultureInfo("tr-TR"))</small>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card stat-card border-0 shadow-sm h-100">
+            <div class="card-body d-flex align-items-center gap-4 p-4">
+                <div class="stat-icon bg-primary-subtle rounded-3 p-3">
+                    <i class="bi bi-people-fill text-primary fs-2"></i>
+                </div>
+                <div>
+                    <div class="fs-1 fw-bold lh-1">@Model.EmployeeCount</div>
+                    <div class="text-muted mt-1">Toplam Çalışan</div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 pb-3 px-4">
+                <a asp-controller="Employee" asp-action="Index" class="text-primary small text-decoration-none">
+                    Tümünü gör <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card border-0 shadow-sm h-100">
+            <div class="card-body d-flex align-items-center gap-4 p-4">
+                <div class="stat-icon bg-success-subtle rounded-3 p-3">
+                    <i class="bi bi-building-fill text-success fs-2"></i>
+                </div>
+                <div>
+                    <div class="fs-1 fw-bold lh-1">@Model.DepartmentCount</div>
+                    <div class="text-muted mt-1">Departman</div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 pb-3 px-4">
+                <a asp-controller="Department" asp-action="Index" class="text-success small text-decoration-none">
+                    Tümünü gör <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card border-0 shadow-sm h-100">
+            <div class="card-body d-flex align-items-center gap-4 p-4">
+                <div class="stat-icon bg-warning-subtle rounded-3 p-3">
+                    <i class="bi bi-briefcase-fill text-warning fs-2"></i>
+                </div>
+                <div>
+                    <div class="fs-1 fw-bold lh-1">@Model.PositionCount</div>
+                    <div class="text-muted mt-1">Pozisyon</div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 pb-3 px-4">
+                <a asp-controller="Position" asp-action="Index" class="text-warning small text-decoration-none">
+                    Tümünü gör <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h6 class="mb-0 fw-semibold"><i class="bi bi-clock-history me-2 text-muted"></i>Son Eklenen Çalışanlar</h6>
+        <a asp-controller="Employee" asp-action="Create" class="btn btn-sm btn-primary">
+            <i class="bi bi-plus-lg me-1"></i>Yeni Çalışan
+        </a>
+    </div>
+    <div class="card-body p-0">
+        @if (Model.RecentEmployees.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Ad Soyad</th>
+                            <th>E-posta</th>
+                            <th>Departman</th>
+                            <th>Pozisyon</th>
+                            <th class="pe-4"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var emp in Model.RecentEmployees)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-medium">@emp.FirstName @emp.LastName</td>
+                                <td class="text-muted">@emp.Email</td>
+                                <td><span class="badge bg-primary-subtle text-primary">@emp.Department?.Name</span></td>
+                                <td class="text-muted">@emp.Position?.Name</td>
+                                <td class="pe-4 text-end">
+                                    <a asp-controller="Employee" asp-action="Details" asp-route-id="@emp.EmployeeId"
+                                       class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="bi bi-people fs-1 d-block mb-3 opacity-25"></i>
+                <p>Henüz çalışan eklenmemiş.</p>
+                <a asp-controller="Employee" asp-action="Create" class="btn btn-primary">İlk çalışanı ekle</a>
+            </div>
+        }
+    </div>
 </div>

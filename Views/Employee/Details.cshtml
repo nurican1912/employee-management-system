@@ -1,18 +1,76 @@
-@model Employee
+@model EmployeeManagementSystem.Models.Employee
 @{
-    ViewData["Title"] = "Employee Details";
+    ViewData["Title"] = "Çalışan Detayı";
 }
-<h2>Employee Details</h2>
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">@Model.FirstName @Model.LastName</h5>
-        <p><b>Email:</b> @Model.Email</p>
-        <p><b>Phone:</b> @Model.Phone</p>
-        <p><b>Birth Date:</b> @Model.BirthDate.ToShortDateString()</p>
-        <p><b>Salary:</b> @Model.Salary.ToString("C")</p>
-        <p><b>Department:</b> @Model.Department?.Name</p>
-        <p><b>Position:</b> @Model.Position?.Name</p>
-        <a asp-action="Edit" asp-route-id="@Model.EmployeeId" class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i> Edit</a>
-        <a asp-action="Index" class="btn btn-secondary btn-sm">Back to List</a>
+
+<div class="d-flex align-items-center mb-4 gap-2">
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left"></i>
+    </a>
+    <h4 class="mb-0 fw-semibold">Çalışan Detayı</h4>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-4 mb-4 pb-4 border-bottom">
+                    <div class="avatar-circle bg-primary text-white fs-3 fw-bold d-flex align-items-center justify-content-center flex-shrink-0"
+                         style="width:72px;height:72px;border-radius:50%">
+                        @Model.FirstName[0]@Model.LastName[0]
+                    </div>
+                    <div>
+                        <h4 class="mb-1 fw-bold">@Model.FirstName @Model.LastName</h4>
+                        <span class="badge bg-primary-subtle text-primary me-2">@Model.Department?.Name</span>
+                        <span class="text-muted">@Model.Position?.Name</span>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="text-muted mt-1"><i class="bi bi-envelope fs-5"></i></div>
+                            <div>
+                                <div class="small text-muted">E-posta</div>
+                                <div class="fw-medium">@Model.Email</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="text-muted mt-1"><i class="bi bi-phone fs-5"></i></div>
+                            <div>
+                                <div class="small text-muted">Telefon</div>
+                                <div class="fw-medium">@(Model.Phone ?? "-")</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="text-muted mt-1"><i class="bi bi-calendar fs-5"></i></div>
+                            <div>
+                                <div class="small text-muted">Doğum Tarihi</div>
+                                <div class="fw-medium">@Model.BirthDate.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("tr-TR"))</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="text-muted mt-1"><i class="bi bi-cash-stack fs-5"></i></div>
+                            <div>
+                                <div class="small text-muted">Maaş</div>
+                                <div class="fw-medium">@Model.Salary.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 px-4 pb-4 d-flex gap-2">
+                <a asp-action="Edit" asp-route-id="@Model.EmployeeId" class="btn btn-primary">
+                    <i class="bi bi-pencil me-1"></i>Düzenle
+                </a>
+                <a asp-action="Index" class="btn btn-outline-secondary">Listeye Dön</a>
+            </div>
+        </div>
     </div>
-</div> 
+</div>

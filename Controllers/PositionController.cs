@@ -1,28 +1,30 @@
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EmployeeManagementSystem.Models;
+using EmployeeManagementSystem.Services;
 
 namespace EmployeeManagementSystem.Controllers
 {
+    [Authorize]
     public class PositionController : Controller
     {
-        private readonly EmployeeManagementContext _context;
-        public PositionController(EmployeeManagementContext context)
+        private readonly IPositionService _positionService;
+
+        public PositionController(IPositionService positionService)
         {
-            _context = context;
+            _positionService = positionService;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Positions.ToListAsync());
+            return View(await _positionService.GetAllAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
-            var position = await _context.Positions.FirstOrDefaultAsync(m => m.PositionId == id);
+            var position = await _positionService.GetByIdAsync(id.Value);
             if (position == null) return NotFound();
             return View(position);
         }
@@ -38,8 +40,7 @@ namespace EmployeeManagementSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(position);
-                await _context.SaveChangesAsync();
+                await _positionService.CreateAsync(position);
                 TempData["SuccessMessage"] = "Pozisyon başarıyla eklendi.";
                 return RedirectToAction(nameof(Index));
             }
@@ -49,7 +50,7 @@ namespace EmployeeManagementSystem.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
-            var position = await _context.Positions.FindAsync(id);
+            var position = await _positionService.GetByIdAsync(id.Value);
             if (position == null) return NotFound();
             return View(position);
         }
@@ -58,24 +59,22 @@ namespace EmployeeManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PositionId,Name")] Position position)
         {
-            if (id != position.PositionId)
-                return NotFound();
+            if (id != position.PositionId) return NotFound();
 
             if (ModelState.IsValid)
             {
-                _context.Update(position);
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Pozisyon başarıyla güncellendi.";
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    await _positionService.UpdateAsync(position);
+                    TempData["SuccessMessage"] = "Pozisyon başarıyla güncellendi.";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!await _positionService.ExistsAsync(id)) return NotFound();
+                    TempData["ErrorMessage"] = "Pozisyon güncellenirken bir hata oluştu. Lütfen tekrar deneyin.";
+                }
             }
-            return View(position);
-        }
-
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null) return NotFound();
-            var position = await _context.Positions.FirstOrDefaultAsync(m => m.PositionId == id);
-            if (position == null) return NotFound();
             return View(position);
         }
 
@@ -83,9 +82,7 @@ namespace EmployeeManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var position = await _context.Positions.FindAsync(id);
-            _context.Positions.Remove(position);
-            await _context.SaveChangesAsync();
+            await _positionService.DeleteAsync(id);
             TempData["SuccessMessage"] = "Pozisyon başarıyla silindi.";
             return RedirectToAction(nameof(Index));
         }

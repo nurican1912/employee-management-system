@@ -1,61 +1,97 @@
-@model Employee
-
+@model EmployeeManagementSystem.Models.Employee
 @{
-    ViewData["Title"] = "Create Employee";
+    ViewData["Title"] = "Yeni Çalışan";
 }
 
-<h2>Create Employee</h2>
+<div class="d-flex align-items-center mb-4 gap-2">
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left"></i>
+    </a>
+    <h4 class="mb-0 fw-semibold">Yeni Çalışan Ekle</h4>
+</div>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" method="post">
-            @Html.AntiForgeryToken()
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small"></div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="FirstName" class="form-label fw-semibold">Ad</label>
+                            <input asp-for="FirstName" class="form-control" placeholder="Adı girin" />
+                            <span asp-validation-for="FirstName" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="LastName" class="form-label fw-semibold">Soyad</label>
+                            <input asp-for="LastName" class="form-control" placeholder="Soyadı girin" />
+                            <span asp-validation-for="LastName" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-7">
+                            <label asp-for="Email" class="form-label fw-semibold">E-posta</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-envelope text-muted"></i></span>
+                                <input asp-for="Email" class="form-control" placeholder="ornek@sirket.com" />
+                            </div>
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-5">
+                            <label asp-for="Phone" class="form-label fw-semibold">Telefon</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-phone text-muted"></i></span>
+                                <input asp-for="Phone" class="form-control" placeholder="0555 000 0000" />
+                            </div>
+                            <span asp-validation-for="Phone" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-5">
+                            <label asp-for="BirthDate" class="form-label fw-semibold">Doğum Tarihi</label>
+                            <input asp-for="BirthDate" class="form-control" type="date" />
+                            <span asp-validation-for="BirthDate" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-7">
+                            <label asp-for="Salary" class="form-label fw-semibold">Maaş (₺)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-currency-dollar text-muted"></i></span>
+                                <input asp-for="Salary" class="form-control" placeholder="0.00" />
+                            </div>
+                            <span asp-validation-for="Salary" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label asp-for="DepartmentId" class="form-label fw-semibold">Departman</label>
+                            <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.DepartmentId">
+                                <option value="">-- Seçin --</option>
+                            </select>
+                            <span asp-validation-for="DepartmentId" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="PositionId" class="form-label fw-semibold">Pozisyon</label>
+                            <select asp-for="PositionId" class="form-select" asp-items="ViewBag.PositionId">
+                                <option value="">-- Seçin --</option>
+                            </select>
+                            <span asp-validation-for="PositionId" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="bi bi-check-lg me-1"></i>Kaydet
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary px-4">İptal</a>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BirthDate" class="control-label"></label>
-                <input asp-for="BirthDate" class="form-control" type="date" />
-                <span asp-validation-for="BirthDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Salary" class="control-label"></label>
-                <input asp-for="Salary" class="form-control" />
-                <span asp-validation-for="Salary" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DepartmentId" class="control-label"></label>
-                <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId"></select>
-                <span asp-validation-for="DepartmentId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PositionId" class="control-label"></label>
-                <select asp-for="PositionId" class="form-control" asp-items="ViewBag.PositionId"></select>
-                <span asp-validation-for="PositionId" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-3">
-                <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Save</button>
-                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
